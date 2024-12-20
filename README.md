@@ -80,9 +80,9 @@ head(dat_counts)
     # A tibble: 6 × 3
       sample_id count_replicate count_per_cm2
       <chr>     <chr>                   <dbl>
-    1 <NA>      c1                         NA
-    2 <NA>      c2                         NA
-    3 <NA>      c3                         NA
-    4 <NA>      c4                         NA
-    5 <NA>      c5                         NA
-    6 <NA>      c6                         NA
+    1 2TSML27P  c1                   4924526.
+    2 2TSML27P  c2                   4559746.
+    3 2TSML27P  c3                   5471696.
+    4 2TSML27P  c4                   4377357.
+    5 2TSML27P  c5                   5654086.
+    6 2TSML27P  c6                   4742136.
