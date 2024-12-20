@@ -11,18 +11,43 @@ This package helps during the analysis of chlorophyll a data and Symbiodiniaceae
 The package can be installed with the `devtools` package:
 
 ```{r}
-devtools::install_github("DeveloperName/PackageName")
+#| message: true
+#| warning: true
+#| eval: false
+devtools::install_github("andieich/coralchlo")
 ```
 
+The current version is `{r} packageVersion("coralchlo")`.
+
+After installation, you can load the package and download the metadata sheet. During this the import, some basic test are done to ensure the sheet was filled out correctly and that the values make sense.
+
 ```{r}
+#| output: false
 library(coralchlo)
 
 link_metadatasheet <- "https://docs.google.com/spreadsheets/d/1KP-_yEQoHC9zHPlVpf3ob9BRJ60qNiGJsdZsO-l3ljw/edit?gid=0#gid=0"
 
 dat_overview <- read_metadata(link_metadatasheet)
 
-dat_counts <- normalise_counts_per_area(dat_overview)
+```
 
+Then, the chlorophyll a concentration can be calculated based on the absorption measured with the photometer.
+
+The photometer files (`.csv`) can be store in Google Drive or locally. If they are stored locally, `path_to_biotekfolder`, is the path to the folder containing these files. If they are stored in Google Drive, `path_to_biotekfolder` is the path within the Google Drive to the folder containing the photometer files. If you use Google Drive, set `is_googledrive = TRUE`. The files are downloaded to a temporary folder or to a folder specified in `download_directory`. All files in `download_directory` will be replaced.
+
+The values are blank-corrected. To ensure that the blank values make sense, they are plotted for all wavelengths and photometer files. This can be skipped by setting `plot = FALSE` in the `normalise_chla_per_area()` function. The area data is used to normalize the chlorophyll a concentration for the surface area of the coral fragment. For each sample, two measurements were taken, therefore two chlorophyll a concentrations will be exported.
+
+```{r}
+#| warning: false
 dat_chla <- normalise_chla_per_area(dat_overview,
                                     path_to_biotekfolder = "/Users/andi/Desktop/test_files")
+
+head(dat_chla)
+```
+
+Similarly, the Symbiodiniaceae counts are normalized for the surface area of the coral fragment. Since six measurements are taken per sample, six values are exported
+
+```{r}
+dat_counts <- normalise_counts_per_area(dat_overview)
+head(dat_counts)
 ```
