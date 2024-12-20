@@ -11,8 +11,6 @@ This package helps during the analysis of chlorophyll a data and Symbiodiniaceae
 The package can be installed with the `devtools` package:
 
 ```{r}
-#| message: true
-#| warning: true
 #| eval: false
 devtools::install_github("andieich/coralchlo")
 ```
