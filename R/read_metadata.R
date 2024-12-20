@@ -91,13 +91,15 @@ read_metadata <- function(googlesheets_link){
 #'
 #' @param data A data frame to be checked for NA values.
 #' @param test A logical expression as a string to specify the columns (and combinations) to be checked for NA values.
+#' @param col_name A character defining the column that should be printed as warning for the respective test.
 #'
 #' @examples
 #' \dontrun{
 #' data <- data.frame(
 #'   id = 1:5,
 #'   type = c("sample", "control", NA, "sample", "control"),
-#'   value = c(10, NA, 15, 20, 25)
+#'   value = c(10, NA, 15, 20, 25),
+#'   col_name = "value"
 #' )
 #' test_for_na(data, test = 'type == "sample" & is.na(value)')
 #' }
@@ -108,8 +110,8 @@ test_for_na <- function(data, test, col_name) {
 
     na_rows <- which(eval(parse(text = test), envir = data))
 
-    warning("NA values found in column `",col_name, "` corrsponding to the following rows in `1. Overview&Chl`:\n",
-            paste(na_rows, collapse = "\n"))
+    warning("\nNA values found in column `",col_name, "` corrsponding to the following rows in `1. Overview&Chl`:\n",
+            paste(na_rows, collapse = "\n"),"\n")
   }
 }
 

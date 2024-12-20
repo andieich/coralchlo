@@ -2,7 +2,7 @@
 #'
 #' This function estimates the surface area of coral fragments using the difference in weight with one and two layers of paraffin wax. The conversion factor is based on the study by Veal et al. (2010).
 #'
-#' @param area_data A data frame containing the weight measurements of coral fragments. It should have columns `sample_id`, `w1_scratched`, and `w2_scratched`.
+#' @param data A data frame containing the weight measurements of coral fragments. It should have columns `sample_id`, `w1_scratched`, and `w2_scratched`.
 #' @param conversion_factor A numeric value representing the conversion factor to estimate the surface area from the weight difference. Default is 34.32.
 #'
 #' @return A data frame with columns `sample_id` and `area`, where `area` is the estimated surface area of the coral fragments.
@@ -31,33 +31,33 @@ get_area <- function(data, conversion_factor = 34.32){
 
   # w_initial higher than w1
   if (any(data$w_initial > data$w1)){
-    warning("For the following samples, `w_initial` is higher than `w1`:\n",
-            paste(data$sample_id[which(data$w_initial > data$w1)], collapse = "\n"))
+    warning("\nFor the following samples, `w_initial` is higher than `w1`:\n",
+            paste(data$sample_id[which(data$w_initial > data$w1)], collapse = "\n"),"\n")
   }
 
 
   # w1_scratched higher than w1
   if (any(data$w1_scratched > data$w1)){
-    warning("For the following samples, `w1_scratched` is higher than `w1`:\n",
-            paste(data$sample_id[which(data$w1_scratched > data$w1)], collapse = "\n"))
+    warning("\nFor the following samples, `w1_scratched` is higher than `w1`:\n",
+            paste(data$sample_id[which(data$w1_scratched > data$w1)], collapse = "\n"),"\n")
   }
 
   # w1_scratched higher than w2
   if (any(data$w1_scratched > data$w2)){
-    warning("For the following samples, `w1_scratched` is higher than `w2`:\n",
-            paste(data$sample_id[which(data$w1_scratched > data$w2)], collapse = "\n"))
+    warning("\nFor the following samples, `w1_scratched` is higher than `w2`:\n",
+            paste(data$sample_id[which(data$w1_scratched > data$w2)], collapse = "\n"),"\n")
   }
 
   # w2_scratched higher than w2
   if (any(data$w2_scratched > data$w2)){
-    warning("For the following samples, `w2_scratched` is higher than `w2`:\n",
-            paste(data$sample_id[which(data$w2_scratched > data$w2)], collapse = "\n"))
+    warning("\nFor the following samples, `w2_scratched` is higher than `w2`:\n",
+            paste(data$sample_id[which(data$w2_scratched > data$w2)], collapse = "\n"),"\n")
   }
 
   # w1_scratched higher than w2_scratched
   if (any(data$w1_scratched > data$w2_scratched)){
-    warning("For the following samples, `w1_scratched` is higher than `w2_scratched`:\n",
-            paste(data$sample_id[which(data$w1_scratched > data$w2_scratched)], collapse = "\n"))
+    warning("\nFor the following samples, `w1_scratched` is higher than `w2_scratched`:\n",
+            paste(data$sample_id[which(data$w1_scratched > data$w2_scratched)], collapse = "\n"),"\n")
   }
 
 

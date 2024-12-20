@@ -10,6 +10,8 @@ test_for_na(data, test, col_name)
 \item{data}{A data frame to be checked for NA values.}
 
 \item{test}{A logical expression as a string to specify the columns (and combinations) to be checked for NA values.}
+
+\item{col_name}{A character defining the column that should be printed as warning for the respective test.}
 }
 \description{
 This function checks for NA values in specific columns (and combinations) of a data frame and warns if any are found. It exports the row and column names with the NA values.
@@ -19,7 +21,8 @@ This function checks for NA values in specific columns (and combinations) of a d
 data <- data.frame(
   id = 1:5,
   type = c("sample", "control", NA, "sample", "control"),
-  value = c(10, NA, 15, 20, 25)
+  value = c(10, NA, 15, 20, 25),
+  col_name = "value"
 )
 test_for_na(data, test = 'type == "sample" & is.na(value)')
 }

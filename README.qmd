@@ -1,0 +1,18 @@
+---
+title: "coralchlo - Coral Chlorophyll and Symbiodiniaceae Counts"
+format: gfm
+editor: visual
+---
+
+```{r}
+library(coralchlo)
+
+link_metadatasheet <- "https://docs.google.com/spreadsheets/d/1KP-_yEQoHC9zHPlVpf3ob9BRJ60qNiGJsdZsO-l3ljw/edit?gid=0#gid=0"
+
+dat_overview <- read_metadata(link_metadatasheet)
+
+dat_counts <- normalise_counts_per_area(dat_overview)
+
+dat_chla <- normalise_chla_per_area(dat_overview,
+                                    path_to_biotekfolder = "/Users/andi/Desktop/test_files")
+```

@@ -1,10 +1,49 @@
+#' Normalise Chlorophyll Concentration for Surface Area of Coral Fragments
+#'
+#' This function calculates the chlorophyll concentration in a coral fragment, normalised for the surface area of that coral fragment, based on absorption measurements. The formula to convert absorptions to chlorophyll concentration comes from Jeffrey & Humphrey (1975).
+#'
+#' @param data A data frame containing metadata for the samples.
+#' @param pl A numeric value representing the path length in cm. Default is 1.
+#' @param v_ml_sw_added A numeric value representing the volume in milliliters of seawater added. Default is 3 mL.
+#' @param v_ml_sw_pipetted A numeric value representing the volume in milliliters of seawater pipetted. Default is 1 mL.
+#' @param path_to_biotekfolder A character string representing the path to the folder containing Biotek files.
+#' @param is_googledrive A logical value indicating whether the Biotek files are stored on Google Drive. Default is FALSE.
+#' @param download_directory A character string representing the directory to download files if they are stored on Google Drive. Default is NA. All files in that directory will be replaced.
+#' @param plot A logical value indicating whether to plot the absorption values for blanks and samples. Default is TRUE.
+#'
+#' @return A data frame with columns `sample_id` and `chl_a_per_cm2`, representing the chlorophyll concentration normalised for surface area.
+#'
+#' @references Jeffrey, S. W., & Humphrey, G. F. (1975). New spectrophotometric equations for determining chlorophylls a, b, c1 and c2 in higher plants, algae and natural phytoplankton. Biochemie Und Physiologie Der Pflanzen, 167(2), 191–194. \doi{10.1016/S0015-3796(17)30778-3}
+#'
+#' @importFrom dplyr filter group_by summarise ungroup mutate select left_join setdiff
+#' @importFrom tidyr pivot_longer
+#' @importFrom ggplot2 ggplot aes geom_point position_jitterdodge facet_wrap theme_minimal theme element_text
+#'
+#' @examples
+#' \dontrun{
+#' data <- data.frame(
+#'   sample_id = c("sample1", "sample2"),
+#'   type = c("sample", "sample"),
+#'   w1 = c(0.5, 0.5),
+#'   w2 = c(1, 1),
+#'   area = c(10, 15),
+#'   filename = c("file1", "file2"),
+#'   m1 = c(1, 2),
+#'   m2 = c(3, 4)
+#' )
+#' path_to_biotekfolder <- "path/to/biotek/files"
+#' normalise_chla_per_area(data, path_to_biotekfolder = path_to_biotekfolder)
+#' }
+#'
+#' @export
 normalise_chla_per_area <- function(data,
                                     pl = 1,
                                     v_ml_sw_added = 3,
                                     v_ml_sw_pipetted = 1,
                                     path_to_biotekfolder,
                                     is_googledrive = FALSE,
-                                    download_directory = NA){
+                                    download_directory = NA,
+                                    plot = TRUE){
 
   # Get photometer data
   data_photometer <- import_biotek2_files(path_to_biotekfolder = path_to_biotekfolder,
@@ -38,24 +77,21 @@ normalise_chla_per_area <- function(data,
 
   verify_positions(data_long, data_photometer)
 
-  # combine chl ov and chl data
+  # combine metadata sheet and photometer data
   data_chlorophyll <- left_join(data_long, data_photometer,
               by = c("filename", "position"))
 
-  # separate blanks and calculate mean per batch
-
-
-  # check from here!!!
+  # separate blanks and calculate mean per file name (= measurement)
   data_blanks <- data_chlorophyll %>%
-    filter(type == "blank") %>%
-    group_by(filename) %>%
-    summarise(mean_abs_663 = round(mean(abs_663),3),
+    dplyr::filter(type == "blank") %>%
+    dplyr::group_by(filename) %>%
+    dplyr::summarise(mean_abs_663 = round(mean(abs_663),3),
               mean_abs_630 = round(mean(abs_630),3),
               mean_abs_750 = round(mean(abs_750),3),
               mean_abs_470 = round(mean(abs_470),3)) %>%
-    ungroup()
+    dplyr::ungroup()
 
-
+  # blank correct measurements
   data_chlorophyll <- data_chlorophyll %>%
     left_join(data_blanks, by = "filename") %>%
     mutate(abs_663_c = round(abs_663 - mean_abs_663,3),
@@ -63,42 +99,40 @@ normalise_chla_per_area <- function(data,
            abs_750_c = round(abs_750 - mean_abs_750,3),
            abs_470_c = round(abs_470 - mean_abs_470,3))
 
+  # plot the values for blanks and samples for each wavelength for each filename
+  # this helps e.g. to find false blank measurements
+  if (plot){
+    plot_abs <- data_chlorophyll %>%
+      dplyr::select(sample_id, type, filename, abs_663_c : abs_470_c) %>%
+      tidyr::pivot_longer(abs_663_c : abs_470_c, names_to = "wavelength", values_to = "absorption") %>%
+      ggplot2::ggplot(ggplot2::aes(x = filename, y = absorption, col = type))+
+      ggplot2::geom_point(position = ggplot2::position_jitterdodge(jitter.width = .3, dodge.width = .6), shape = 21)+
+      ggplot2::facet_wrap(~wavelength)+
+      ggplot2::theme_minimal() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1))
 
-  data_chlorophyll %>%
-    group_by(type) %>%
-    summarise_at(c("abs_663_c", "abs_630_c", "abs_750_c", "abs_470_c"),
-                 list(min = min, max = max, mean = mean),
-                 na.rm = TRUE) %>%
-    pivot_longer(abs_663_c_min:abs_470_c_mean,
-                 names_to = "parameter",
-                 values_to = "value") %>%
-    mutate(wavelength = substr(parameter, 5,7),
-           summary = substr(parameter, 11,14),
-           value = round(value,3)) %>%
-    select(wavelength, summary, value, type) %>%
-    arrange(wavelength, summary, value) %>%
-    pivot_wider(names_from = type, values_from = value) %>%
-    print()
+    print(plot_abs)
+  }
+
 
   # filter only samples
-
   data_chlorophyll <- data_chlorophyll %>%
-    filter(type == "sample")
+    dplyr::filter(type == "sample")
 
-  # calculate chlorophyll with formula, correct for volume
+  # calculate chlorophyll with formula in Jeffrey & Humphrey (1975), correct for volume
   data_chlorophyll <- data_chlorophyll %>%
-    mutate(chl_a_subsample = 11.43 * (abs_663_c - abs_750_c) / pl - 0.64 * (abs_630_c - abs_750_c)/pl) %>% #in µg per mL
-    mutate(chl_a_per_sample = chl_a_subsample * (v_ml_sw_added / v_ml_sw_pipetted) * (w2 / w1)) %>% # µg in whole sample. of V_slurry, 40 mL were centrifuged
+    dplyr::mutate(chl_a_subsample = 11.43 * (abs_663_c - abs_750_c) / pl - 0.64 * (abs_630_c - abs_750_c)/pl) %>% #in µg per mL
+    dplyr::mutate(chl_a_per_sample = chl_a_subsample * (v_ml_sw_added / v_ml_sw_pipetted) * (w2 / w1)) %>% # µg in whole sample. of V_slurry, 40 mL were centrifuged
     #and filled up with 3 mL SSW, 1 mL of SSW was centrifuged and 1 mL acetone added, 0.5 mL acetone measured.
     # c in 0.5 mL is the absolute amount in the 1 mL, 3 is multiplied because after centrifucation of the 40 mL, only 1 mL is taken for chl.
     # This is the absolute amount in the 40 mL that were centrifuged
     # (w2 / w1) is multiplied to consider that V_slurry was more than 40 mL
-    mutate(chl_a_per_cm2 = chl_a_per_sample/area)
+    dplyr::mutate(chl_a_per_cm2 = chl_a_per_sample/area)
 
 
   # clean
   data_chlorophyll <- data_chlorophyll %>%
-    select(sample_id,
+    dplyr::select(sample_id,
            chl_a_per_cm2)
 
   return(data_chlorophyll)

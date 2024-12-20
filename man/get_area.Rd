@@ -7,9 +7,9 @@
 get_area(data, conversion_factor = 34.32)
 }
 \arguments{
-\item{conversion_factor}{A numeric value representing the conversion factor to estimate the surface area from the weight difference. Default is 34.32.}
+\item{data}{A data frame containing the weight measurements of coral fragments. It should have columns \code{sample_id}, \code{w1_scratched}, and \code{w2_scratched}.}
 
-\item{area_data}{A data frame containing the weight measurements of coral fragments. It should have columns \code{sample_id}, \code{w1_scratched}, and \code{w2_scratched}.}
+\item{conversion_factor}{A numeric value representing the conversion factor to estimate the surface area from the weight difference. Default is 34.32.}
 }
 \value{
 A data frame with columns \code{sample_id} and \code{area}, where \code{area} is the estimated surface area of the coral fragments.
