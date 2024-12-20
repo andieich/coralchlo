@@ -1,5 +1,6 @@
 ---
-title: "coralchlo - Coral Chlorophyll and Symbiodiniaceae Counts"
+title: "`coralchlo`"
+subtitle: "Coral Chlorophyll and Symbiodiniaceae Counts"
 format: gfm
 editor: visual
 ---
