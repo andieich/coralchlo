@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_metadata.R
 \name{read_metadata}
 \alias{read_metadata}
-\title{Read and Combine Metadata from Google Sheets}
+\title{Read and Combine Metadata from Google Sheets and Calculate Area}
 \usage{
 read_metadata(googlesheets_link)
 }
@@ -13,7 +13,7 @@ read_metadata(googlesheets_link)
 A data frame containing combined metadata from the specified Google Sheets.
 }
 \description{
-This function reads metadata from a Google Sheets link and combines data from multiple sheets into a single data frame.
+This function reads metadata from a Google Sheets link and combines data from multiple sheets into a single data frame. After some checks, the area is calculated with the get_area() function.
 }
 \examples{
 \dontrun{

@@ -6,16 +6,13 @@ normalise_chla_per_area <- function(data,
                                     is_googledrive = FALSE,
                                     download_directory = NA){
 
-
   # Get photometer data
-
   data_photometer <- import_biotek2_files(path_to_biotekfolder = path_to_biotekfolder,
                                           is_googledrive = is_googledrive,
                                           download_directory = download_directory)
 
 
   # all files from metadata in read into data_photometer?
-
   fn_metadata <- data$filename %>%
     unique()
 

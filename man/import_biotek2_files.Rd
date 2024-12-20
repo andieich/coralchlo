@@ -5,13 +5,13 @@
 \title{Import and clean Biotek2 files}
 \usage{
 import_biotek2_files(
-  path_to_folder,
+  path_to_biotekfolder,
   is_googledrive = FALSE,
   download_directory = NA
 )
 }
 \arguments{
-\item{path_to_folder}{A character string specifying the path to the folder containing the \code{.csv} files.}
+\item{path_to_biotekfolder}{A character string specifying the path to the folder containing the \code{.csv} files.}
 
 \item{is_googledrive}{A logical value indicating whether the folder is on Google Drive. Default is \code{FALSE}.}
 
