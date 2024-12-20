@@ -36,6 +36,9 @@ normalise_counts_per_area <- function(data,
                                       v_ml_count = 0.01,
                                       v_ml_sw_added = 3,
                                       v_ml_sw_pipetted = 1) {
+  data <- data %>%
+    dplyr::filter(type == "sample")
+
   data %>%
     tidyr::pivot_longer(cols = c1:c6,
                         names_to = "count_replicate",
