@@ -1,6 +1,8 @@
 # `coralchlo`
 
 
+## Coral Chlorophyll and Symbiodiniaceae Counts
+
 ``` r
 library(coralchlo)
 

@@ -1,9 +1,18 @@
 ---
 title: "`coralchlo`"
-subtitle: "Coral Chlorophyll and Symbiodiniaceae Counts"
 format: gfm
 editor: visual
 ---
+
+## Coral Chlorophyll and Symbiodiniaceae Counts
+
+This package helps during the analysis of chlorophyll a data and Symbiodiniaceae counts. The data has to be prepared following these [protocols](https://andieich.github.io/coral_chlorophyll_symcounts/).
+
+The package can be installed with the `devtools` package:
+
+```{r}
+devtools::install_github("DeveloperName/PackageName")
+```
 
 ```{r}
 library(coralchlo)
