@@ -17,10 +17,20 @@ devtools::install_github("andieich/coralchlo")
 
 The current version is `{r} packageVersion("coralchlo")`.
 
-After installation, you can load the package and download the metadata sheet. During this the import, some basic test are done to ensure the sheet was filled out correctly and that the values make sense.
+After installation, you can load the package and download the metadata sheet. During this the import of the sheet, some basic test are done to ensure it was filled out correctly and that the values make sense.
 
 ```{r}
-#| output: false
+#| eval: false
+library(coralchlo)
+
+link_metadatasheet <- "example_link"
+
+dat_overview <- read_metadata(link_metadatasheet)
+
+```
+
+```{r}
+#| include: false
 library(coralchlo)
 
 link_metadatasheet <- "https://docs.google.com/spreadsheets/d/1KP-_yEQoHC9zHPlVpf3ob9BRJ60qNiGJsdZsO-l3ljw/edit?gid=0#gid=0"
@@ -29,23 +39,57 @@ dat_overview <- read_metadata(link_metadatasheet)
 
 ```
 
-Then, the chlorophyll a concentration can be calculated based on the absorption measured with the photometer.
+Then, the chlorophyll a concentration is calculated based on the absorption measured with the photometer.
 
 The photometer files (`.csv`) can be store in Google Drive or locally. If they are stored locally, `path_to_biotekfolder`, is the path to the folder containing these files. If they are stored in Google Drive, `path_to_biotekfolder` is the path within the Google Drive to the folder containing the photometer files. If you use Google Drive, set `is_googledrive = TRUE`. The files are downloaded to a temporary folder or to a folder specified in `download_directory`. All files in `download_directory` will be replaced.
 
 The values are blank-corrected. To ensure that the blank values make sense, they are plotted for all wavelengths and photometer files. This can be skipped by setting `plot = FALSE` in the `normalise_chla_per_area()` function. The area data is used to normalize the chlorophyll a concentration for the surface area of the coral fragment. For each sample, two measurements were taken, therefore two chlorophyll a concentrations will be exported.
 
 ```{r}
+#| eval: false
+dat_chla <- normalise_chla_per_area(dat_overview,
+                                    path_to_biotekfolder = "example_path")
+
+```
+
+```{r}
+#| include: false
+library(tidyverse)
+library(gt)
+```
+
+```{r}
+#| echo: false
 #| warning: false
 dat_chla <- normalise_chla_per_area(dat_overview,
                                     path_to_biotekfolder = "/Users/andi/Desktop/test_files")
 
-head(dat_chla)
+```
+
+```{r}
+#| eval: false
+head(dat_chla, n = 10)
+```
+
+```{r}
+#| echo: false
+dat_chla %>% 
+  head(n = 10) %>% 
+  gt()
 ```
 
 Similarly, the Symbiodiniaceae counts are normalized for the surface area of the coral fragment. Since six measurements are taken per sample, six values are exported
 
 ```{r}
+#| eval: false
 dat_counts <- normalise_counts_per_area(dat_overview)
-head(dat_counts)
+head(dat_counts, n = 10)
+```
+
+```{r}
+#| echo: false
+dat_counts <- normalise_counts_per_area(dat_overview)
+dat_counts %>% 
+  head(n = 10) %>% 
+  gt()
 ```
