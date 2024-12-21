@@ -107,7 +107,7 @@ normalise_chla_per_area <- function(data,
       tidyr::pivot_longer(abs_663_c : abs_470_c, names_to = "wavelength", values_to = "absorption") %>%
       ggplot2::ggplot(ggplot2::aes(x = filename, y = absorption, col = type))+
       ggplot2::geom_point(position = ggplot2::position_jitterdodge(jitter.width = .3, dodge.width = .6), shape = 21)+
-      ggplot2::facet_wrap(~wavelength)+
+      ggplot2::facet_wrap(~wavelength, scales = "free.y")+
       ggplot2::theme_minimal() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1))
 
