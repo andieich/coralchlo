@@ -58,19 +58,17 @@ dat_chla <- normalise_chla_per_area(dat_overview,
 head(dat_chla, n = 10)
 ```
 
-    # A tibble: 10 × 3
        sample_id measurement_replicate chl_a_per_cm2
-       <chr>     <chr>                         <dbl>
-     1 2TSML27P  m1                             3.42
-     2 2TSML27P  m2                             3.42
-     3 2TSPL07P  m1                             2.74
-     4 2TSPL07P  m2                             2.75
-     5 2TSAL09P  m1                             5.25
-     6 2TSAL09P  m2                             5.25
-     7 2TSML26P  m1                             6.47
-     8 2TSML26P  m2                             6.47
-     9 2TSAL07P  m1                             6.49
-    10 2TSAL07P  m2                             6.49
+    1   2TSML27P                    m1      3.416571
+    2   2TSML27P                    m2      3.416571
+    3   2TSPL07P                    m1      2.741200
+    4   2TSPL07P                    m2      2.747538
+    5   2TSAL09P                    m1      5.251357
+    6   2TSAL09P                    m2      5.251357
+    7   2TSML26P                    m1      6.467369
+    8   2TSML26P                    m2      6.467369
+    9   2TSAL07P                    m1      6.488811
+    10  2TSAL07P                    m2      6.488367
 
 Similarly, the Symbiodiniaceae counts are normalized for the surface
 area of the coral fragment. Since six measurements are taken per sample,
