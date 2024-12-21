@@ -15,7 +15,7 @@
 #'
 #' @references Jeffrey, S. W., & Humphrey, G. F. (1975). New spectrophotometric equations for determining chlorophylls a, b, c1 and c2 in higher plants, algae and natural phytoplankton. Biochemie Und Physiologie Der Pflanzen, 167(2), 191–194. \doi{10.1016/S0015-3796(17)30778-3}
 #'
-#' @importFrom dplyr filter group_by summarise ungroup mutate select left_join setdiff
+#' @importFrom dplyr filter group_by summarise ungroup mutate select left_join setdiff rename
 #' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot aes geom_point position_jitterdodge facet_wrap theme_minimal theme element_text
 #'
@@ -72,8 +72,6 @@ normalise_chla_per_area <- function(data,
                  names_to = 'measurement',
                  values_to = 'position')
 
-  print(data_long)
-
   # test for duplicated positions
   verify_unique_positions(data_long)
 
@@ -126,7 +124,7 @@ normalise_chla_per_area <- function(data,
     dplyr::mutate(chl_a_subsample = 11.43 * (abs_663_c - abs_750_c) / pl - 0.64 * (abs_630_c - abs_750_c)/pl) %>% #in µg per mL
     dplyr::mutate(chl_a_per_sample = chl_a_subsample * (v_ml_sw_added / v_ml_sw_pipetted) * (w2 / w1)) %>% # µg in whole sample. of V_slurry, 40 mL were centrifuged
     #and filled up with 3 mL SSW, 1 mL of SSW was centrifuged and 1 mL acetone added, 0.5 mL acetone measured.
-    # c in 0.5 mL is the absolute amount in the 1 mL, 3 is multiplied because after centrifucation of the 40 mL, only 1 mL is taken for chl.
+    # c in 0.5 mL is the absolute amount in the 1 mL, 3 is multiplied because after centrifugation of the 40 mL, only 1 mL is taken for chl.
     # This is the absolute amount in the 40 mL that were centrifuged
     # (w2 / w1) is multiplied to consider that V_slurry was more than 40 mL
     dplyr::mutate(chl_a_per_cm2 = chl_a_per_sample/area)
@@ -134,7 +132,9 @@ normalise_chla_per_area <- function(data,
 
   # clean
   data_chlorophyll <- data_chlorophyll %>%
+    dplyr::rename(measurement_replicate = measurement) %>%
     dplyr::select(sample_id,
+                  measurement_replicate,
            chl_a_per_cm2)
 
   return(data_chlorophyll)
