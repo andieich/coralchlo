@@ -55,7 +55,7 @@ dat_chla <- normalise_chla_per_area(dat_overview,
 ```{r}
 #| include: false
 library(tidyverse)
-library(gt)
+
 ```
 
 ```{r}
@@ -75,7 +75,7 @@ head(dat_chla, n = 10)
 #| echo: false
 dat_chla %>% 
   head(n = 10) %>% 
-  gt()
+  as.data.frame()
 ```
 
 Similarly, the Symbiodiniaceae counts are normalized for the surface area of the coral fragment. Since six measurements are taken per sample, six values are exported
@@ -91,5 +91,6 @@ head(dat_counts, n = 10)
 dat_counts <- normalise_counts_per_area(dat_overview)
 dat_counts %>% 
   head(n = 10) %>% 
-  gt()
+  as.data.frame()
 ```
+
