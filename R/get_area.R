@@ -6,7 +6,7 @@
 #' @param conversion_factor A numeric value representing the conversion factor to estimate the surface area from the weight difference. Default is 34.32.
 #'
 #' @return A data frame with columns `sample_id` and `area`, where `area` is the estimated surface area of the coral fragments.
-#' @importFrom dplyr mutate select %>%
+#' @importFrom dplyr mutate select %>% .data
 #'
 #' @references Veal, C. J., Holmes, G., Nunez, M., Hoegh-Guldberg, O., & Osborn, J. (2010). A comparative study of methods for surface area and three-dimensional shape measurement of coral skeletons. Limnology and Oceanography: Methods, 8(5), 241–253. \doi{10.4319/lom.2010.8.241}
 #'
@@ -25,7 +25,7 @@ get_area <- function(data, conversion_factor = 34.32){
 
   # only sample, no blanks
   data <- data %>%
-    filter(type == "sample")
+    filter(.data$type == "sample")
 
   # Some tests
 
@@ -62,9 +62,9 @@ get_area <- function(data, conversion_factor = 34.32){
 
 
   data <- data %>%
-    dplyr::mutate(delta_w = w2_scratched - w1_scratched,
-           area = delta_w * conversion_factor) %>%
-    dplyr::select(sample_id, area)
+    dplyr::mutate(delta_w = .data$w2_scratched - .data$w1_scratched,
+                  area = .data$delta_w * conversion_factor) %>%
+    dplyr::select(.data$sample_id, .data$area)
 
     return(data)
 }

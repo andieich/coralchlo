@@ -9,7 +9,7 @@
 #'
 #' @return A data frame with normalised cell counts per surface area of coral fragments.
 #'
-#' @importFrom dplyr mutate select %>%
+#' @importFrom dplyr mutate select %>% .data
 #' @importFrom tidyr pivot_longer
 #'
 #' @examples
@@ -37,15 +37,15 @@ normalise_counts_per_area <- function(data,
                                       v_ml_sw_added = 3,
                                       v_ml_sw_pipetted = 1) {
   data <- data %>%
-    dplyr::filter(type == "sample")
+    dplyr::filter(.data$type == "sample")
 
   data %>%
-    tidyr::pivot_longer(cols = c1:c6,
+    tidyr::pivot_longer(cols = .data$c1:.data$c6,
                         names_to = "count_replicate",
                         values_to = "count_subsample") %>% #make long
-    dplyr::mutate(dillution_factor = v_zoox / (v_zoox + v_sw)) %>%
-    dplyr::mutate(count_per_mL = 1000 * count_subsample / (dillution_factor * v_ml_count)) %>%
-    dplyr::mutate(count_per_sample = count_per_mL * (v_ml_sw_added / v_ml_sw_pipetted) * (w2 / w1)) %>%
-    dplyr::mutate(count_per_cm2 = count_per_sample / area) %>%
-    dplyr::select(sample_id, count_replicate, count_per_cm2)
+    dplyr::mutate(dillution_factor = .data$v_zoox / (.data$v_zoox + .data$v_sw)) %>%
+    dplyr::mutate(count_per_mL = 1000 * .data$count_subsample / (.data$dillution_factor * v_ml_count)) %>%
+    dplyr::mutate(count_per_sample = .data$count_per_mL * (v_ml_sw_added / v_ml_sw_pipetted) * (.data$w2 / .data$w1)) %>%
+    dplyr::mutate(count_per_cm2 = .data$count_per_sample /.data$ area) %>%
+    dplyr::select(.data$ample_id, .data$count_replicate, .data$count_per_cm2)
 }

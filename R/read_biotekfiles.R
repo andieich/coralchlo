@@ -9,9 +9,10 @@
 #' @return A data frame containing the cleaned data from all `.csv` files.
 #' @importFrom googledrive drive_ls drive_get drive_download as_id
 #' @importFrom purrr map_dfr
-#' @importFrom dplyr mutate mutate_at filter %>%
-#' @importFrom dplyr %>%
+#' @importFrom dplyr mutate mutate_at filter %>% .data
+#' @importFrom dplyr %>% .data
 #' @importFrom janitor clean_names
+#'@importFrom utils read.csv
 #' @examples
 #' \dontrun{
 #' # Read and clean files from a local directory
@@ -91,16 +92,16 @@ import_biotek2_files<- function(path_to_biotekfolder, is_googledrive = FALSE, do
 #'
 read_and_clean_file <- function(path_to_file){
 
-  data <- read.csv(path_to_file)[,2:7]#get rid of type and blank corrected values
+  data <- utils::read.csv(path_to_file)[,2:7]#get rid of type and blank corrected values
 
   data <- data %>%
     janitor::clean_names() %>%
-    dplyr::mutate(position = as.character(position)) %>%
+    dplyr::mutate(position = as.character(.data$position)) %>%
     dplyr::mutate_at(dplyr::vars(2:6),
               list(as.numeric)) %>%
     dplyr::filter(!dplyr::if_all(2:6, ~ is.na(.))) %>% # delete rows containing only NA values
-    dplyr::mutate(filename = basename(path_to_file) %>%
-             substr(1, nchar(.)-4))
+    dplyr::mutate(filename = basename(.data$path_to_file) %>%
+             substr(1, nchar(.data$path_to_file)-4))
 
   return(data)
 

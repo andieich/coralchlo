@@ -8,7 +8,7 @@
 #'
 #' @importFrom googlesheets4 read_sheet
 #' @importFrom janitor clean_names
-#' @importFrom dplyr select left_join %>%
+#' @importFrom dplyr select left_join %>% .data
 #'
 #' @examples
 #' \dontrun{
@@ -23,28 +23,28 @@ read_metadata <- function(googlesheets_link){
   dat_overview <- googlesheets4::read_sheet(googlesheets_link,
                        sheet = "1. Overview&Chl") %>%
     janitor::clean_names() %>%
-    dplyr::select(sample_id,
-                  type,
-                  w_slurry1,
-                  w_slurry2,
-                  m1,
-                  m2,
-                  filename)
+    dplyr::select(.data$sample_id,
+                  .data$type,
+                  .data$w_slurry1,
+                  .data$w_slurry2,
+                  .data$m1,
+                  .data$m2,
+                  .data$filename)
 
 
   #get count sheet and explicitly ask for all needed columns
   dat_count <- googlesheets4::read_sheet(googlesheets_link,
                           sheet = "2. Counts") %>%
     janitor::clean_names() %>%
-    dplyr::select(sample_id,
-                  v_zoox,
-                  v_sw,
-                  c1,
-                  c2,
-                  c3,
-                  c4,
-                  c5,
-                  c6)
+    dplyr::select(.data$sample_id,
+                  .data$v_zoox,
+                  .data$v_sw,
+                  .data$c1,
+                  .data$c2,
+                  .data$c3,
+                  .data$c4,
+                  .data$c5,
+                  .data$c6)
 
 
 
@@ -52,12 +52,12 @@ read_metadata <- function(googlesheets_link){
   dat_area <- googlesheets4::read_sheet(googlesheets_link,
                          sheet = "3. Area") %>%
     janitor::clean_names() %>%
-    dplyr::select(sample_id,
-                  w_initial,
-                  w1,
-                  w1_scratched,
-                  w2,
-                  w2_scratched)
+    dplyr::select(.data$sample_id,
+                  .data$w_initial,
+                  .data$w1,
+                  .data$w1_scratched,
+                  .data$w2,
+                  .data$w2_scratched)
 
 
   #combine data

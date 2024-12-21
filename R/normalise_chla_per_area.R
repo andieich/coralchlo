@@ -15,7 +15,7 @@
 #'
 #' @references Jeffrey, S. W., & Humphrey, G. F. (1975). New spectrophotometric equations for determining chlorophylls a, b, c1 and c2 in higher plants, algae and natural phytoplankton. Biochemie Und Physiologie Der Pflanzen, 167(2), 191–194. \doi{10.1016/S0015-3796(17)30778-3}
 #'
-#' @importFrom dplyr filter group_by summarise ungroup mutate select left_join setdiff rename
+#' @importFrom dplyr filter group_by summarise ungroup mutate select left_join setdiff rename .data
 #' @importFrom tidyr pivot_longer
 #' @importFrom ggplot2 ggplot aes geom_point position_jitterdodge facet_wrap theme_minimal theme element_text
 #'
@@ -83,29 +83,34 @@ normalise_chla_per_area <- function(data,
 
   # separate blanks and calculate mean per file name (= measurement)
   data_blanks <- data_chlorophyll %>%
-    dplyr::filter(type == "blank") %>%
-    dplyr::group_by(filename) %>%
-    dplyr::summarise(mean_abs_663 = round(mean(abs_663),3),
-              mean_abs_630 = round(mean(abs_630),3),
-              mean_abs_750 = round(mean(abs_750),3),
-              mean_abs_470 = round(mean(abs_470),3)) %>%
+    dplyr::filter(.data$type == "blank") %>%
+    dplyr::group_by(.data$filename) %>%
+    dplyr::summarise(mean_abs_663 = round(mean(.data$abs_663),3),
+              mean_abs_630 = round(mean(.data$abs_630),3),
+              mean_abs_750 = round(mean(.data$abs_750),3),
+              mean_abs_470 = round(mean(.data$abs_470),3)) %>%
     dplyr::ungroup()
 
   # blank correct measurements
   data_chlorophyll <- data_chlorophyll %>%
     left_join(data_blanks, by = "filename") %>%
-    mutate(abs_663_c = round(abs_663 - mean_abs_663,3),
-           abs_630_c = round(abs_630 - mean_abs_630,3),
-           abs_750_c = round(abs_750 - mean_abs_750,3),
-           abs_470_c = round(abs_470 - mean_abs_470,3))
+    mutate(abs_663_c = round(.data$abs_663 - .data$mean_abs_663,3),
+           abs_630_c = round(.data$abs_630 - .data$mean_abs_630,3),
+           abs_750_c = round(.data$abs_750 - .data$mean_abs_750,3),
+           abs_470_c = round(.data$abs_470 - .data$mean_abs_470,3))
 
   # plot the values for blanks and samples for each wavelength for each filename
   # this helps e.g. to find false blank measurements
   if (plot){
     plot_abs <- data_chlorophyll %>%
-      dplyr::select(sample_id, type, filename, abs_663_c : abs_470_c) %>%
-      tidyr::pivot_longer(abs_663_c : abs_470_c, names_to = "wavelength", values_to = "absorption") %>%
-      ggplot2::ggplot(ggplot2::aes(x = filename, y = absorption, col = type))+
+      dplyr::select(.data$sample_id,
+                    .data$type,
+                    .data$filename,
+                    .data$abs_663_c : .data$abs_470_c) %>%
+      tidyr::pivot_longer(.data$abs_663_c : .data$abs_470_c,
+                          names_to = "wavelength",
+                          values_to = "absorption") %>%
+      ggplot2::ggplot(ggplot2::aes(x = .data$filename, y = .data$absorption, col = .data$type))+
       ggplot2::geom_point(position = ggplot2::position_jitterdodge(jitter.width = .3, dodge.width = .6), shape = 21)+
       ggplot2::facet_wrap(~wavelength, scales = "free_y")+
       ggplot2::theme_minimal() +
@@ -117,25 +122,25 @@ normalise_chla_per_area <- function(data,
 
   # filter only samples
   data_chlorophyll <- data_chlorophyll %>%
-    dplyr::filter(type == "sample")
+    dplyr::filter(.data$type == "sample")
 
   # calculate chlorophyll with formula in Jeffrey & Humphrey (1975), correct for volume
   data_chlorophyll <- data_chlorophyll %>%
-    dplyr::mutate(chl_a_subsample = 11.43 * (abs_663_c - abs_750_c) / pl - 0.64 * (abs_630_c - abs_750_c)/pl) %>% #in µg per mL
-    dplyr::mutate(chl_a_per_sample = chl_a_subsample * (v_ml_sw_added / v_ml_sw_pipetted) * (w2 / w1)) %>% # µg in whole sample. of V_slurry, 40 mL were centrifuged
+    dplyr::mutate(chl_a_subsample = 11.43 * (.data$abs_663_c - .data$abs_750_c) / pl - 0.64 * (.data$abs_630_c - .data$abs_750_c)/pl) %>% #in µg per mL
+    dplyr::mutate(chl_a_per_sample = .data$chl_a_subsample * (v_ml_sw_added / v_ml_sw_pipetted) * (.data$w2 / .data$w1)) %>% # µg in whole sample. of V_slurry, 40 mL were centrifuged
     #and filled up with 3 mL SSW, 1 mL of SSW was centrifuged and 1 mL acetone added, 0.5 mL acetone measured.
     # c in 0.5 mL is the absolute amount in the 1 mL, 3 is multiplied because after centrifugation of the 40 mL, only 1 mL is taken for chl.
     # This is the absolute amount in the 40 mL that were centrifuged
     # (w2 / w1) is multiplied to consider that V_slurry was more than 40 mL
-    dplyr::mutate(chl_a_per_cm2 = chl_a_per_sample/area)
+    dplyr::mutate(chl_a_per_cm2 = .data$chl_a_per_sample/.data$area)
 
 
   # clean
   data_chlorophyll <- data_chlorophyll %>%
-    dplyr::rename(measurement_replicate = measurement) %>%
-    dplyr::select(sample_id,
-                  measurement_replicate,
-           chl_a_per_cm2)
+    dplyr::rename(measurement_replicate = .data$measurement) %>%
+    dplyr::select(.data$sample_id,
+                  .data$measurement_replicate,
+                  .data$chl_a_per_cm2)
 
   return(data_chlorophyll)
 }
@@ -162,7 +167,8 @@ normalise_chla_per_area <- function(data,
 #' @export
 verify_unique_positions <- function(data) {
   duplicated_positions <- data %>%
-    dplyr::group_by(filename, position) %>%
+    dplyr::group_by(.data$filename,
+                    .data$position) %>%
     dplyr::filter(dplyr::n() > 1) %>%
     dplyr::ungroup()
 
@@ -171,8 +177,8 @@ verify_unique_positions <- function(data) {
 
     for (filename in duplicated_filenames) {
       positions <- duplicated_positions %>%
-        dplyr::filter(filename == !!filename) %>%
-        dplyr::pull(position)
+        dplyr::filter(.data$filename == !!.data$filename) %>%
+        dplyr::pull(.data$position)
 
       stop("In the metadata sheet for ", filename, ", the following positions are duplicated:\n", paste(unique(positions), collapse = ", "), "\n\n")
     }
@@ -215,8 +221,8 @@ verify_positions <- function(data_1, data_2) {
 
     for (filename in missing_filenames) {
       positions <- missing_positions %>%
-        dplyr::filter(filename == !!filename) %>%
-        dplyr::pull(position)
+        dplyr::filter(.data$filename == !!.data$filename) %>%
+        dplyr::pull(.data$position)
 
       stop("The follwong positions in the metadata sheet for ", filename, " do not exist in the photometer data:\n ", paste(positions, collapse = ", "), "\n\n")
     }
