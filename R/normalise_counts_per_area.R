@@ -47,5 +47,5 @@ normalise_counts_per_area <- function(data,
     dplyr::mutate(count_per_mL = 1000 * .data$count_subsample / (.data$dillution_factor * v_ml_count)) %>%
     dplyr::mutate(count_per_sample = .data$count_per_mL * (v_ml_sw_added / v_ml_sw_pipetted) * (.data$w2 / .data$w1)) %>%
     dplyr::mutate(count_per_cm2 = .data$count_per_sample /.data$ area) %>%
-    dplyr::select(.data$ample_id, .data$count_replicate, .data$count_per_cm2)
+    dplyr::select(.data$sample_id, .data$count_replicate, .data$count_per_cm2)
 }
