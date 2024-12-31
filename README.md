@@ -13,7 +13,7 @@ The package can be installed with the `devtools` package:
 devtools::install_github("andieich/coralchlo")
 ```
 
-The current version is 0.0.0.1.
+The current version is 0.0.0.2.
 
 After installation, you can load the package and download the metadata
 sheet. During this the import of the sheet, some basic test are done to
@@ -58,17 +58,17 @@ dat_chla <- normalise_chla_per_area(dat_overview,
 head(dat_chla, n = 10)
 ```
 
-       sample_id measurement_replicate chl_a_per_cm2
-    1   2TSML27P                    m1      3.416571
-    2   2TSML27P                    m2      3.416571
-    3   2TSPL07P                    m1      2.741200
-    4   2TSPL07P                    m2      2.747538
-    5   2TSAL09P                    m1      5.251357
-    6   2TSAL09P                    m2      5.251357
-    7   2TSML26P                    m1      6.467369
-    8   2TSML26P                    m2      6.467369
-    9   2TSAL07P                    m1      6.488811
-    10  2TSAL07P                    m2      6.488367
+       sample_id measurement_replicate chl_a_per_cm2 chl_c2_per_cm2 chl_tot_per_cm2
+    1   2TSML27P                    m1      3.416571      0.4155315        3.832102
+    2   2TSML27P                    m2      3.416571      0.4155315        3.832102
+    3   2TSPL07P                    m1      2.741200      0.3220933        3.063293
+    4   2TSPL07P                    m2      2.747538      0.3200805        3.067618
+    5   2TSAL09P                    m1      5.251357      0.5499048        5.801261
+    6   2TSAL09P                    m2      5.251357      0.5499048        5.801261
+    7   2TSML26P                    m1      6.467369      0.5805320        7.047901
+    8   2TSML26P                    m2      6.467369      0.5805320        7.047901
+    9   2TSAL07P                    m1      6.488811      0.6076038        7.096414
+    10  2TSAL07P                    m2      6.488367      0.6264047        7.114771
 
 Similarly, the Symbiodiniaceae counts are normalized for the surface
 area of the coral fragment. Since six measurements are taken per sample,

@@ -61,8 +61,8 @@ library(tidyverse)
 ```{r}
 #| echo: false
 #| warning: false
-dat_chla <- normalise_chla_per_area(dat_overview,
-                                    path_to_biotekfolder = "/Users/andi/Desktop/test_files")
+dat_chla <- normalise_chl_per_area(dat_overview,
+                                   path_to_biotekfolder = "/Users/andi/Desktop/test_files")
 
 ```
 
