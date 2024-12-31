@@ -1,6 +1,6 @@
 #' Normalise Chlorophyll Concentration for Surface Area of Coral Fragments
 #'
-#' This function calculates the chlorophyll concentration in a coral fragment, normalised for the surface area of that coral fragment, based on absorption measurements. The formula to convert absorptions to chlorophyll concentration comes from Jeffrey & Humphrey (1975).
+#' This function calculates the chlorophyll (a + c2) concentration in a coral fragment, normalised for the surface area of that coral fragment, based on absorption measurements. The formula to convert absorptions to chlorophyll concentration comes from Jeffrey & Humphrey (1975).
 #'
 #' @param data A data frame containing metadata for the samples.
 #' @param pl A numeric value representing the path length in cm. Default is 1.
@@ -11,7 +11,7 @@
 #' @param download_directory A character string representing the directory to download files if they are stored on Google Drive. Default is NA. All files in that directory will be replaced.
 #' @param plot A logical value indicating whether to plot the absorption values for blanks and samples. Default is TRUE.
 #'
-#' @return A data frame with columns `sample_id` and `chl_a_per_cm2`, representing the chlorophyll concentration normalised for surface area.
+#' @return A data frame with columns `sample_id`. `chl_a_per_cm2` and `chl_c2_per_cm2`, and `chl_tot_per_cm2`, representing the chlorophyll a, c2, and total chlorophyll concentration normalised for surface area.
 #'
 #' @references Jeffrey, S. W., & Humphrey, G. F. (1975). New spectrophotometric equations for determining chlorophylls a, b, c1 and c2 in higher plants, algae and natural phytoplankton. Biochemie Und Physiologie Der Pflanzen, 167(2), 191–194. \doi{10.1016/S0015-3796(17)30778-3}
 #'
@@ -85,7 +85,8 @@ normalise_chla_per_area <- function(data,
   data_blanks <- data_chlorophyll %>%
     dplyr::filter(.data$type == "blank") %>%
     dplyr::group_by(.data$filename) %>%
-    dplyr::summarise(mean_abs_663 = round(mean(.data$abs_663),3),
+    dplyr::summarise(
+              mean_abs_663 = round(mean(.data$abs_663),3),
               mean_abs_630 = round(mean(.data$abs_630),3),
               mean_abs_750 = round(mean(.data$abs_750),3),
               mean_abs_470 = round(mean(.data$abs_470),3)) %>%
@@ -128,11 +129,17 @@ normalise_chla_per_area <- function(data,
   data_chlorophyll <- data_chlorophyll %>%
     dplyr::mutate(chl_a_subsample = 11.43 * (.data$abs_663_c - .data$abs_750_c) / pl - 0.64 * (.data$abs_630_c - .data$abs_750_c)/pl) %>% #in µg per mL
     dplyr::mutate(chl_a_per_sample = .data$chl_a_subsample * (v_ml_sw_added / v_ml_sw_pipetted) * (.data$w2 / .data$w1)) %>% # µg in whole sample. of V_slurry, 40 mL were centrifuged
+    dplyr::mutate(chl_a_per_cm2 = .data$chl_a_per_sample/.data$area)
     #and filled up with 3 mL SSW, 1 mL of SSW was centrifuged and 1 mL acetone added, 0.5 mL acetone measured.
     # c in 0.5 mL is the absolute amount in the 1 mL, 3 is multiplied because after centrifugation of the 40 mL, only 1 mL is taken for chl.
     # This is the absolute amount in the 40 mL that were centrifuged
     # (w2 / w1) is multiplied to consider that V_slurry was more than 40 mL
-    dplyr::mutate(chl_a_per_cm2 = .data$chl_a_per_sample/.data$area)
+
+
+    #similarly, calculate chl c2
+    dplyr::mutate(chl_c2_subsample = 27.09 * (.data$abs_630_c - .data$abs_750_c) / pl - 3.63 * (.data$abs_663_c - .data$abs_750_c)/pl) %>% #in µg per mL
+    dplyr::mutate(chl_c2_per_sample = .data$chl_c2_subsample * (v_ml_sw_added / v_ml_sw_pipetted) * (.data$w2 / .data$w1)) %>% # µg in whole sample. of V_slurry, 40 mL were centrifuged
+      dplyr::mutate(chl_c2_per_cm2 = .data$chl_c2_per_sample/.data$area)
 
 
   # clean
@@ -140,7 +147,11 @@ normalise_chla_per_area <- function(data,
     dplyr::rename(measurement_replicate = .data$measurement) %>%
     dplyr::select(.data$sample_id,
                   .data$measurement_replicate,
-                  .data$chl_a_per_cm2)
+                  .data$chl_a_per_cm2,
+                  .data$chl_c2_per_cm2) %>%
+    #total chl
+    dplyr::mutate(chl_tot_per_cm2 = .data$chl_a_per_cm2 + .data$chl_c2_per_cm2)
+
 
   return(data_chlorophyll)
 }
