@@ -74,7 +74,7 @@ import_biotek2_files<- function(path_to_biotekfolder, is_googledrive = FALSE, do
   clean_data <- csv_paths %>%
     purrr::map_dfr(read_and_clean_file)
 
-
+  print(clean_data[1:4,])
   return(clean_data)
 
 }
@@ -100,8 +100,9 @@ read_and_clean_file <- function(path_to_file){
     dplyr::mutate_at(dplyr::vars(2:6),
               list(as.numeric)) %>%
     dplyr::filter(!dplyr::if_all(2:6, ~ is.na(.))) %>% # delete rows containing only NA values
-    dplyr::mutate(filename = basename(.data$path_to_file) %>%
-             substr(1, nchar(.data$path_to_file)-4))
+    dplyr::mutate(filename = basename(path_to_file)) %>%
+    dplyr::mutate(filename = substr(.data$filename, 1, nchar(.data$filename)-4))
+  print(data)
 
   return(data)
 
