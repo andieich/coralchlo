@@ -36,7 +36,7 @@
 #' }
 #'
 #' @export
-normalise_chla_per_area <- function(data,
+normalise_chl_per_area <- function(data,
                                     pl = 1,
                                     v_ml_sw_added = 3,
                                     v_ml_sw_pipetted = 1,

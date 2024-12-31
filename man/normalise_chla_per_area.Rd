@@ -33,10 +33,10 @@ normalise_chla_per_area(
 \item{plot}{A logical value indicating whether to plot the absorption values for blanks and samples. Default is TRUE.}
 }
 \value{
-A data frame with columns \code{sample_id} and \code{chl_a_per_cm2}, representing the chlorophyll concentration normalised for surface area.
+A data frame with columns \code{sample_id}. \code{chl_a_per_cm2} and \code{chl_c2_per_cm2}, and \code{chl_tot_per_cm2}, representing the chlorophyll a, c2, and total chlorophyll concentration normalised for surface area.
 }
 \description{
-This function calculates the chlorophyll concentration in a coral fragment, normalised for the surface area of that coral fragment, based on absorption measurements. The formula to convert absorptions to chlorophyll concentration comes from Jeffrey & Humphrey (1975).
+This function calculates the chlorophyll (a + c2) concentration in a coral fragment, normalised for the surface area of that coral fragment, based on absorption measurements. The formula to convert absorptions to chlorophyll concentration comes from Jeffrey & Humphrey (1975).
 }
 \examples{
 \dontrun{
