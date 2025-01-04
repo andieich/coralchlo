@@ -19,6 +19,8 @@ The current version is `{r} packageVersion("coralchlo")`.
 
 After installation, you can load the package and download the metadata sheet. During this the import of the sheet, some basic test are done to ensure it was filled out correctly and that the values make sense.
 
+Additionally, the surface area is estimated from the increase in weight with the additional layer of paraffin wax. Different conversion factors can be used. Either a value from the literature from @veal2010, or conversion factors based on custom-made calibration blocks (see [here](calibration.qmd) for more info). The method can be selected in the `read_metadata()` function with `method = "veal"` or `method = "criobe"`. The default selection is `"criobe"`.
+
 ```{r}
 #| eval: false
 library(coralchlo)
@@ -43,7 +45,7 @@ Then, the chlorophyll a concentration is calculated based on the absorption meas
 
 The photometer files (`.csv`) can be store in Google Drive or locally. If they are stored locally, `path_to_biotekfolder`, is the path to the folder containing these files. If they are stored in Google Drive, `path_to_biotekfolder` is the path within the Google Drive to the folder containing the photometer files. If you use Google Drive, set `is_googledrive = TRUE`. The files are downloaded to a temporary folder or to a folder specified in `download_directory`. All files in `download_directory` will be replaced.
 
-The values are blank-corrected. To ensure that the blank values make sense, they are plotted for all wavelengths and photometer files. This can be skipped by setting `plot = FALSE` in the `normalise_chla_per_area()` function. The area data is used to normalize the chlorophyll a concentration for the surface area of the coral fragment. For each sample, two measurements were taken, therefore two chlorophyll a concentrations will be exported.
+The values are blank-corrected. To ensure that the blank values make sense, they are plotted for all wavelengths and photometer files. This can be skipped by setting `plot = FALSE` in the `normalise_chla_per_area()` function. The area data is used to normalize the chlorophyll concentration for the surface area of the coral fragment. For each sample, two measurements were taken, therefore two chlorophyll a and c2 concentrations will be exported.
 
 ```{r}
 #| eval: false

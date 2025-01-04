@@ -3,6 +3,7 @@
 #' This function reads metadata from a Google Sheets link and combines data from multiple sheets into a single data frame. After some checks, the area is calculated with the get_area() function.
 #'
 #' @param googlesheets_link A character string representing the link to the Google Sheets document.
+#' @param method Method used for the estimation of the surface area. Can either be a value based on the study by Veal et al. (2010) (`veal`) or conversion factors based on custom-build calibration objects (`criobe`).
 #'
 #' @return A data frame containing combined metadata from the specified Google Sheets.
 #'
@@ -17,7 +18,8 @@
 #' }
 #'
 #' @export
-read_metadata <- function(googlesheets_link){
+read_metadata <- function(googlesheets_link,
+                          method = "criobe"){
 
   #get chl a and overview sheet and explicitly ask for all needed columns
   dat_overview <- googlesheets4::read_sheet(googlesheets_link,
@@ -73,7 +75,8 @@ read_metadata <- function(googlesheets_link){
 
   # calculate area
 
-  dat_calulated_area <- get_area(dat_combined)
+  dat_calulated_area <- get_area(dat_combined,
+                                 method = method)
 
   dat_combined <- dplyr::left_join(dat_combined,
                                    dat_calulated_area,

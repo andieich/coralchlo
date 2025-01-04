@@ -4,18 +4,18 @@
 \alias{get_area}
 \title{Estimate Surface Area of Coral Fragments}
 \usage{
-get_area(data, conversion_factor = 34.32)
+get_area(data, method)
 }
 \arguments{
 \item{data}{A data frame containing the weight measurements of coral fragments. It should have columns \code{sample_id}, \code{w1_scratched}, and \code{w2_scratched}.}
 
-\item{conversion_factor}{A numeric value representing the conversion factor to estimate the surface area from the weight difference. Default is 34.32.}
+\item{method}{Method used for the estimation of the surface area. Can either be a value based on the study by Veal et al. (2010) (\code{veal}) or conversion factors based on custom-build calibration objects (\code{criobe}).}
 }
 \value{
 A data frame with columns \code{sample_id} and \code{area}, where \code{area} is the estimated surface area of the coral fragments.
 }
 \description{
-This function estimates the surface area of coral fragments using the difference in weight with one and two layers of paraffin wax. The conversion factor is based on the study by Veal et al. (2010).
+This function estimates the surface area of coral fragments using the difference in weight with one and two layers of paraffin wax.
 }
 \examples{
 \dontrun{
