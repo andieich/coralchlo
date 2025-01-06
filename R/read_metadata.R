@@ -9,7 +9,7 @@
 #'
 #' @importFrom googlesheets4 read_sheet
 #' @importFrom janitor clean_names
-#' @importFrom dplyr select left_join %>% .data
+#' @importFrom dplyr select left_join %>% .data pull
 #'
 #' @examples
 #' \dontrun{
@@ -37,8 +37,8 @@ read_metadata <- function(googlesheets_link,
 
   #get sample IDs
   sample_ids <- dat_overview %>%
-    filter(!is.na(.data$sample_id)) %>%
-    pull(.data$sample_id)
+    dplyr::filter(!is.na(.data$sample_id)) %>%
+    dplyr::pull(.data$sample_id)
 
   duplicated_sample_ids <- sample_ids[duplicated(sample_ids)]
 
