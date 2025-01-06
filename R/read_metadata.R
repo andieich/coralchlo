@@ -82,10 +82,8 @@ read_metadata <- function(googlesheets_link,
   #combine data
   dat_combined <- dplyr::left_join(dat_overview, dat_count, by = "sample_id")
 
-  print(dat_combined)
   dat_combined <- dplyr::left_join(dat_combined, dat_area, by = "sample_id")
 
-  print(dat_combined)
 
   # any NA in important columns
   run_na_tests(dat_combined)
