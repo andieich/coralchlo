@@ -13,7 +13,7 @@ The package can be installed with the `devtools` package:
 devtools::install_github("andieich/coralchlo")
 ```
 
-The current version is 0.0.0.3.
+The current version is 0.0.0.4.
 
 After installation, you can load the package and download the metadata
 sheet. During this the import of the sheet, some basic test are done to
