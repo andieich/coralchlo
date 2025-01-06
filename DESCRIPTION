@@ -1,6 +1,6 @@
 Package: coralchlo
 Title: Coral Chlorophyll and Symbiodiniaceae Counts
-Version: 0.0.0.3
+Version: 0.0.0.4
 Authors@R: 
     person("Andreas", "Eich", , "eich.andreas@web.de", role = c("aut", "cre"))
 Description: Calculates chlorophyll a concentration from absorption measurements, normalises chlorophyll a concentration and symbiodiniaceae counts per area.

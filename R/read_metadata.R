@@ -33,6 +33,23 @@ read_metadata <- function(googlesheets_link,
                   .data$m2,
                   .data$filename)
 
+  # Find duplicated sample IDs
+
+  #get sample IDs
+  sample_ids <- dat_overview %>%
+    filter(!is.na(.data$sample_id)) %>%
+    pull(.data$sample_id)
+
+  duplicated_sample_ids <- sample_ids[duplicated(sample_ids)]
+
+  # If there are duplicated values, trigger an error
+  if (length(duplicated_sample_ids) > 0) {
+    duplicated_sample_ids <- unique(duplicated_sample_ids)
+    stop(paste("Duplicated sample names detected for:", paste(duplicated_sample_ids, collapse = ", ")))
+  }
+
+
+
 
   #get count sheet and explicitly ask for all needed columns
   dat_count <- googlesheets4::read_sheet(googlesheets_link,

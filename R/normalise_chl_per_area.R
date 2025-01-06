@@ -231,7 +231,7 @@ verify_positions <- function(data_1, data_2) {
 
     for (filename in missing_filenames) {
       positions <- missing_positions %>%
-        dplyr::filter(.data$filename == !!.data$filename) %>%
+        dplyr::filter(.data$filename == !!filename) %>%
         dplyr::pull(.data$position)
 
       stop("The follwong positions in the metadata sheet for ", filename, " do not exist in the photometer data:\n ", paste(positions, collapse = ", "), "\n\n")
