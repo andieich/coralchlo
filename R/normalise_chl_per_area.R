@@ -91,6 +91,13 @@ normalise_chl_per_area <- function(data,
               mean_abs_470 = round(mean(.data$abs_470),3)) %>%
     dplyr::ungroup()
 
+
+  if(nrow(data_blanks) == 0){
+    stop("No blank samples in metadata sheet")
+  }
+
+
+
   # blank correct measurements
   data_chlorophyll <- data_chlorophyll %>%
     left_join(data_blanks, by = "filename") %>%
