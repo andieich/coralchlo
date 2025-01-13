@@ -93,7 +93,6 @@ read_and_clean_file <- function(path_to_file){
 
   data <- utils::read.csv(path_to_file)[,2:7]#get rid of type and blank corrected values
 
-  print(path_to_file)
   data <- data %>%
     janitor::clean_names() %>%
     dplyr::mutate(position = as.character(.data$position)) %>%
