@@ -187,7 +187,7 @@ verify_unique_positions <- function(data) {
 
     for (filename in duplicated_filenames) {
       positions <- duplicated_positions %>%
-        dplyr::filter(.data$filename == !!.data$filename) %>%
+        dplyr::filter(.data$filename == !!filename) %>%
         dplyr::pull(.data$position)
 
       stop("In the metadata sheet for ", filename, ", the following positions are duplicated:\n", paste(unique(positions), collapse = ", "), "\n\n")
