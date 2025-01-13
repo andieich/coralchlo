@@ -65,7 +65,6 @@ normalise_chl_per_area <- function(data,
             paste(missing_files, collapse = "\n"))
   }
 
-
   # transform metadata to long df, i.e. position of replicate measurement in 2 rows
   data_long <- data %>%
     tidyr::pivot_longer(cols = c('m1', 'm2'),
