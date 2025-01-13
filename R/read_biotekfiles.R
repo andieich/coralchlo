@@ -23,7 +23,7 @@
 #' }
 
 import_biotek2_files<- function(path_to_biotekfolder, is_googledrive = FALSE, download_directory = NA){
-  # fiels in download_path will be replaced
+  # files in download_path will be replaced
 
   if (!is_googledrive) {
 
