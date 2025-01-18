@@ -191,19 +191,9 @@ run_na_tests <- function(data){
   test_for_na(data = data,
               test = 'type == "sample" & is.na(c6)',
               col_name = "c6")
-
-  test_for_na(data = data,
-              test = 'type == "sample" & is.na(w_initial)',
-              col_name = "w_initial")
-  test_for_na(data = data,
-              test = 'type == "sample" & is.na(w1)',
-              col_name = "w1")
   test_for_na(data = data,
               test = 'type == "sample" & is.na(w1_scratched)',
               col_name = "w1_scratched")
-  test_for_na(data = data,
-              test = 'type == "sample" & is.na(w2)',
-              col_name = "w2")
   test_for_na(data = data,
               test = 'type == "sample" & is.na(w2_scratched)',
               col_name = "w2_scratched")

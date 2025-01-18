@@ -29,31 +29,6 @@ get_area <- function(data, method){
 
   # Some tests
 
-  # w_initial higher than w1
-  if (any(data$w_initial > data$w1)){
-    warning("\nFor the following samples, `w_initial` is higher than `w1`:\n",
-            paste(data$sample_id[which(data$w_initial > data$w1)], collapse = "\n"),"\n")
-  }
-
-
-  # w1_scratched higher than w1
-  if (any(data$w1_scratched > data$w1)){
-    warning("\nFor the following samples, `w1_scratched` is higher than `w1`:\n",
-            paste(data$sample_id[which(data$w1_scratched > data$w1)], collapse = "\n"),"\n")
-  }
-
-  # w1_scratched higher than w2
-  if (any(data$w1_scratched > data$w2)){
-    warning("\nFor the following samples, `w1_scratched` is higher than `w2`:\n",
-            paste(data$sample_id[which(data$w1_scratched > data$w2)], collapse = "\n"),"\n")
-  }
-
-  # w2_scratched higher than w2
-  if (any(data$w2_scratched > data$w2)){
-    warning("\nFor the following samples, `w2_scratched` is higher than `w2`:\n",
-            paste(data$sample_id[which(data$w2_scratched > data$w2)], collapse = "\n"),"\n")
-  }
-
   # w1_scratched higher than w2_scratched
   if (any(data$w1_scratched > data$w2_scratched)){
     warning("\nFor the following samples, `w1_scratched` is higher than `w2_scratched`:\n",
