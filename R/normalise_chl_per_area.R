@@ -134,7 +134,7 @@ normalise_chl_per_area <- function(data,
   # calculate chlorophyll with formula in Jeffrey & Humphrey (1975), correct for volume
   data_chlorophyll <- data_chlorophyll %>%
     dplyr::mutate(chl_a_subsample = 11.43 * (.data$abs_663_c - .data$abs_750_c) / pl - 0.64 * (.data$abs_630_c - .data$abs_750_c)/pl) %>% #in µg per mL
-    dplyr::mutate(chl_a_per_sample = .data$chl_a_subsample * (v_ml_sw_added / v_ml_sw_pipetted) * (.data$w2 / .data$w1)) %>% # µg in whole sample. of V_slurry, 40 mL were centrifuged
+    dplyr::mutate(chl_a_per_sample = .data$chl_a_subsample * (v_ml_sw_added / v_ml_sw_pipetted) * (.data$w_slurry2 / .data$w_slurry1)) %>% # µg in whole sample. of V_slurry, 40 mL were centrifuged
     dplyr::mutate(chl_a_per_cm2 = .data$chl_a_per_sample/.data$area) %>%
     #and filled up with 3 mL SSW, 1 mL of SSW was centrifuged and 1 mL acetone added, 0.5 mL acetone measured.
     # This is the absolute amount in the 40 mL that were centrifuged
