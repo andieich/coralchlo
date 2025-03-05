@@ -24,8 +24,8 @@
 #'   c6 = c(130, 180),
 #'   v_zoox = c(1, 1),
 #'   v_sw = c(2, 2),
-#'   w1 = c(0.5, 0.5),
-#'   w2 = c(1, 1),
+#'   w_slurry1 = c(0.5, 0.5),
+#'   w_slurry2 = c(1, 1),
 #'   area = c(10, 15)
 #' )
 #' normalise_counts_per_area(data)
@@ -45,7 +45,7 @@ normalise_counts_per_area <- function(data,
                         values_to = "count_subsample") %>% #make long
     dplyr::mutate(dillution_factor = .data$v_zoox / (.data$v_zoox + .data$v_sw)) %>%
     dplyr::mutate(count_per_mL = 1000 * .data$count_subsample / (.data$dillution_factor * v_ml_count)) %>%
-    dplyr::mutate(count_per_sample = .data$count_per_mL * (v_ml_sw_added / v_ml_sw_pipetted) * (.data$w2 / .data$w1)) %>%
+    dplyr::mutate(count_per_sample = .data$count_per_mL * (v_ml_sw_added / v_ml_sw_pipetted) * (.data$w_slurry2 / .data$w_slurry1)) %>%
     dplyr::mutate(count_per_cm2 = .data$count_per_sample /.data$ area) %>%
     dplyr::select(.data$sample_id, .data$count_replicate, .data$count_per_cm2)
 }

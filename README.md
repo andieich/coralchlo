@@ -13,7 +13,7 @@ The package can be installed with the `devtools` package:
 devtools::install_github("andieich/coralchlo")
 ```
 
-The current version is 0.0.0.6.
+The current version is 0.0.0.7.
 
 After installation, you can load the package and download the metadata
 sheet. During this the import of the sheet, some basic test are done to
@@ -67,16 +67,16 @@ head(dat_chla, n = 10)
 ```
 
        sample_id measurement_replicate chl_a_per_cm2 chl_c2_per_cm2 chl_tot_per_cm2
-    1   2TSML27P                    m1      2.514030      0.3057623        2.819792
-    2   2TSML27P                    m2      2.514030      0.3057623        2.819792
-    3   2TSPL07P                    m1      2.013116      0.2365427        2.249658
-    4   2TSPL07P                    m2      2.017770      0.2350646        2.252834
-    5   2TSAL09P                    m1      3.948941      0.4135201        4.362461
-    6   2TSAL09P                    m2      3.948941      0.4135201        4.362461
-    7   2TSML26P                    m1      4.847892      0.4351625        5.283054
-    8   2TSML26P                    m2      4.847892      0.4351625        5.283054
-    9   2TSAL07P                    m1      4.706739      0.4407329        5.147472
-    10  2TSAL07P                    m2      4.706417      0.4543703        5.160787
+    1   2TSML27P                    m1      1.623838      0.1974951        1.821333
+    2   2TSML27P                    m2      1.623838      0.1974951        1.821333
+    3   2TSPL07P                    m1      1.549499      0.1820674        1.731566
+    4   2TSPL07P                    m2      1.553081      0.1809296        1.734011
+    5   2TSAL09P                    m1      2.446933      0.2562347        2.703167
+    6   2TSAL09P                    m2      2.446933      0.2562347        2.703167
+    7   2TSML26P                    m1      3.853164      0.3458726        4.199037
+    8   2TSML26P                    m2      3.853164      0.3458726        4.199037
+    9   2TSAL07P                    m1      3.416526      0.3199191        3.736445
+    10  2TSAL07P                    m2      3.416292      0.3298182        3.746110
 
 Similarly, the Symbiodiniaceae counts are normalized for the surface
 area of the coral fragment. Since six measurements are taken per sample,
@@ -88,13 +88,13 @@ head(dat_counts, n = 10)
 ```
 
        sample_id count_replicate count_per_cm2
-    1   2TSML27P              c1       3623635
-    2   2TSML27P              c2       3355218
-    3   2TSML27P              c3       4026261
-    4   2TSML27P              c4       3221009
-    5   2TSML27P              c5       4160470
-    6   2TSML27P              c6       3489426
-    7   2TSPL07P              c1       3868471
-    8   2TSPL07P              c2       4479282
-    9   2TSPL07P              c3       3766669
-    10  2TSPL07P              c4       3155858
+    1   2TSML27P              c1       2340544
+    2   2TSML27P              c2       2167170
+    3   2TSML27P              c3       2600604
+    4   2TSML27P              c4       2080483
+    5   2TSML27P              c5       2687291
+    6   2TSML27P              c6       2253857
+    7   2TSPL07P              c1       2977569
+    8   2TSPL07P              c2       3447712
+    9   2TSPL07P              c3       2899212
+    10  2TSPL07P              c4       2429070
