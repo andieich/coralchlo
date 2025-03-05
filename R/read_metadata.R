@@ -72,10 +72,7 @@ read_metadata <- function(googlesheets_link,
                          sheet = "3. Area") %>%
     janitor::clean_names() %>%
     dplyr::select(.data$sample_id,
-                  .data$w_initial,
-                  .data$w1,
                   .data$w1_scratched,
-                  .data$w2,
                   .data$w2_scratched)
 
 
